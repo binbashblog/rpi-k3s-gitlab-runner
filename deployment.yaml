@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-runner1
+  namespace: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gitlab-runner1
+  template:
+    metadata:
+      labels:
+        name: gitlab-runner1
+    spec:
+      containers:
+      - args:
+        - run
+        image: docker.io/gitlab/gitlab-runner:latest
+        name: gitlab-runner1
+        volumeMounts:
+        - mountPath: /etc/gitlab-runner
+          name: config
+      restartPolicy: Always
+      volumes:
+      - configMap:
+          name: gitlab-runner1-config
+        name: config
